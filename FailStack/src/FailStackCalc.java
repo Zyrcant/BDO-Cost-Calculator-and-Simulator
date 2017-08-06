@@ -220,7 +220,6 @@ public class FailStackCalc extends javax.swing.JFrame {
     private void simulateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateButtonActionPerformed
         boolean passed = false;
         calculate();
-        String savedEnhance = currentE.getText();
         String savedFS = currentFS.getText();
         String savedPass = passRate.getText();
         int duraUsed = 0;
@@ -231,11 +230,15 @@ public class FailStackCalc extends javax.swing.JFrame {
             double rng = Math.random()*100;
             double pass = Double.parseDouble(passRate.getText());
             if(rng <= pass)
+            {
                 passed = true;
+                currentFS.setText(savedFS);
+                passRate.setText(savedPass);
+            }
             tries++;
             failstacks++;
             currentFS.setText(failstacks + "");
-            output.setText(output.getText() + "\nTry: " + tries + " | rng: " + Math.round(rng));
+            output.setText(output.getText() + "\nTry: " + tries + " | failstack : " + failstacks);
         }
     }//GEN-LAST:event_simulateButtonActionPerformed
 
@@ -275,7 +278,7 @@ public class FailStackCalc extends javax.swing.JFrame {
         int curFS = Integer.parseInt(p);
         if(curEnhance > -1 && curEnhance < 20){
             if(curEnhance < 7)
-               passRate.setText("100.00%");
+               passRate.setText("100.00");
             else
             {
                 double basePass = stats[curEnhance][0];
