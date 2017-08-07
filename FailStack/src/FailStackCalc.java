@@ -87,6 +87,8 @@ public class FailStackCalc extends javax.swing.JFrame {
         gradeType = new javax.swing.JComboBox<>();
         forceCostLabel = new javax.swing.JLabel();
         forceCost = new javax.swing.JLabel();
+        forceBSused = new javax.swing.JLabel();
+        forceDuraUsed = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -170,11 +172,15 @@ public class FailStackCalc extends javax.swing.JFrame {
         forceCost.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         forceCost.setText("0");
 
+        forceBSused.setText("               ");
+
+        forceDuraUsed.setText("                 ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -223,11 +229,13 @@ public class FailStackCalc extends javax.swing.JFrame {
                                 .addComponent(currentE, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(forceBSused)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(forceCostLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(forceCost)))
+                        .addComponent(forceCost))
+                    .addComponent(forceDuraUsed))
                 .addGap(47, 47, 47))
         );
         layout.setVerticalGroup(
@@ -283,7 +291,11 @@ public class FailStackCalc extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(forceCostLabel)
-                            .addComponent(forceCost))))
+                            .addComponent(forceCost))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(forceBSused)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(forceDuraUsed)))
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
@@ -311,6 +323,7 @@ public class FailStackCalc extends javax.swing.JFrame {
         int duraUsed = 0;
         int tries = 0;
         int failstacks = Integer.parseInt(currentFS.getText());
+        int numSims = Integer.parseInt(simulations.getText());
         //calculating forced cost if item is a weapon
         if(gearType.getSelectedIndex() == 0)
         {
@@ -322,6 +335,8 @@ public class FailStackCalc extends javax.swing.JFrame {
             {
                 int index = getEnhanceLevel();
                 forceCost.setText(String.format("%,d", getStoneCost((int)weaponstats[index][3]) + getRepairCost(((int)weaponstats[index][4]))));
+                forceBSused.setText("Black stones used: " + (int)weaponstats[index][3]);
+                forceDuraUsed.setText("Durability used: " + (int)weaponstats[index][4]);
         
             }
         }
@@ -336,6 +351,8 @@ public class FailStackCalc extends javax.swing.JFrame {
             {
                 int index = getEnhanceLevel();
                 forceCost.setText(String.format("%,d", getStoneCost((int)armorstats[index][3]) + getRepairCost(((int)armorstats[index][4]))));
+                forceBSused.setText("Black stones used: " + (int)armorstats[index][3]);
+                forceDuraUsed.setText("Durability used: " + (int)armorstats[index][4]);
             }
         }
         //repeats the enhancement process until it passes
@@ -525,8 +542,10 @@ public class FailStackCalc extends javax.swing.JFrame {
     private javax.swing.JTextField currentE;
     private javax.swing.JTextField currentFS;
     private javax.swing.JLabel eLevel;
+    private javax.swing.JLabel forceBSused;
     private javax.swing.JLabel forceCost;
     private javax.swing.JLabel forceCostLabel;
+    private javax.swing.JLabel forceDuraUsed;
     private javax.swing.JLabel fs;
     private javax.swing.JLabel gearLabel;
     private javax.swing.JComboBox<String> gearType;

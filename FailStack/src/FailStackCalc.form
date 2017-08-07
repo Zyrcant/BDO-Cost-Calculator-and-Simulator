@@ -23,7 +23,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -86,12 +86,14 @@
               </Group>
               <EmptySpace pref="97" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="forceBSused" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="443" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="forceCostLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="forceCost" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="forceDuraUsed" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
           </Group>
@@ -162,6 +164,10 @@
                           <Component id="forceCostLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="forceCost" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="forceBSused" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="forceDuraUsed" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace pref="80" max="32767" attributes="0"/>
@@ -368,6 +374,16 @@
           <Font name="Tahoma" size="13" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="forceBSused">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="               "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="forceDuraUsed">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="                 "/>
       </Properties>
     </Component>
   </SubComponents>
