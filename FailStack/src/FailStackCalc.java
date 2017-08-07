@@ -57,6 +57,8 @@ public class FailStackCalc extends javax.swing.JFrame {
         simulateButton = new javax.swing.JButton();
         simLabel = new javax.swing.JLabel();
         simulations = new javax.swing.JTextField();
+        cronStonesLabel = new javax.swing.JLabel();
+        cronStones = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,6 +87,7 @@ public class FailStackCalc extends javax.swing.JFrame {
 
         passRateLabel.setText("Pass rate:");
 
+        passRate.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         passRate.setText("0");
 
         jLabel2.setFont(new java.awt.Font("Open Sans", 1, 24)); // NOI18N
@@ -117,6 +120,11 @@ public class FailStackCalc extends javax.swing.JFrame {
 
         simulations.setText("30");
 
+        cronStonesLabel.setFont(new java.awt.Font("Open Sans", 0, 13)); // NOI18N
+        cronStonesLabel.setText("Cron stones used");
+
+        cronStones.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -142,6 +150,10 @@ public class FailStackCalc extends javax.swing.JFrame {
                                     .addGap(18, 18, 18)
                                     .addComponent(currentE, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(cronStonesLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cronStones, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addComponent(simLabel)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -190,7 +202,11 @@ public class FailStackCalc extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(itemLabel)
                             .addComponent(itemCost, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cronStonesLabel)
+                            .addComponent(cronStones, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(simLabel)
                             .addComponent(simulations, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -239,13 +255,14 @@ public class FailStackCalc extends javax.swing.JFrame {
                 duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
                 tries++;
                 failstacks += getEnhanceLevel() > 14 ? getEnhanceLevel() - 13 : 1;
-                currentFS.setText(passed ? savedFS : failstacks + "");
-                output.setText(output.getText() + "\nTry: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10));
+                currentFS.setText(failstacks + "");
+                output.setText(output.getText() + "\nTry: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10 + Integer.parseInt(cronStones.getText())*1000000*tries));
             }
             else
             {
                 tries++;
-                output.setText(output.getText() + "\nPASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10));
+                currentFS.setText(savedFS);
+                output.setText(output.getText() + "\nPASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10 + Integer.parseInt(cronStones.getText())*1000000*tries));
             }
             
         }
@@ -358,6 +375,8 @@ public class FailStackCalc extends javax.swing.JFrame {
     private javax.swing.JLabel Cost;
     private javax.swing.JTextField bsCost;
     private javax.swing.JLabel bsLabel;
+    private javax.swing.JTextField cronStones;
+    private javax.swing.JLabel cronStonesLabel;
     private javax.swing.JTextField currentE;
     private javax.swing.JTextField currentFS;
     private javax.swing.JLabel eLevel;
