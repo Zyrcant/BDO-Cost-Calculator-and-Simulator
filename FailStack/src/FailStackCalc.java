@@ -324,38 +324,9 @@ public class FailStackCalc extends javax.swing.JFrame {
         int tries = 0;
         int failstacks = Integer.parseInt(currentFS.getText());
         int numSims = Integer.parseInt(simulations.getText());
-        //calculating forced cost if item is a weapon
-        if(gearType.getSelectedIndex() == 0)
-        {
-            if(getEnhanceLevel() < 7)
-                forceCost.setText("0");
-            else if (getEnhanceLevel() > 14)
-                forceCost.setText("Can't force!");
-            else
-            {
-                int index = getEnhanceLevel();
-                forceCost.setText(String.format("%,d", getStoneCost((int)weaponstats[index][3]) + getRepairCost(((int)weaponstats[index][4]))));
-                forceBSused.setText("Black stones used: " + (int)weaponstats[index][3]);
-                forceDuraUsed.setText("Durability used: " + (int)weaponstats[index][4]);
-        
-            }
-        }
-        //calculating forced cost if item is a piece of armor
-        else
-        {
-            if(getEnhanceLevel() < 5)
-                forceCost.setText("0");
-            else if (getEnhanceLevel() > 14)
-                forceCost.setText("Can't force!");
-            else
-            {
-                int index = getEnhanceLevel();
-                forceCost.setText(String.format("%,d", getStoneCost((int)armorstats[index][3]) + getRepairCost(((int)armorstats[index][4]))));
-                forceBSused.setText("Black stones used: " + (int)armorstats[index][3]);
-                forceDuraUsed.setText("Durability used: " + (int)armorstats[index][4]);
-            }
-        }
+        calculateForceCost();
         //repeats the enhancement process until it passes
+        output.setText(output.getText() + "------------------------------------------------------\n");
         while(!passed){
             calculate();
             double rng = Math.random()*100;
@@ -372,12 +343,12 @@ public class FailStackCalc extends javax.swing.JFrame {
                 duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
                 failstacks += getEnhanceLevel() > 14 ? getEnhanceLevel() - 13 : 1;
                 currentFS.setText(failstacks + "");
-                output.setText(output.getText() + "\nTry: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)));
+                output.setText(output.getText() + "Try: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
             }
             else
             {
                 currentFS.setText(savedFS);
-                output.setText(output.getText() + "\nPASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)));
+                output.setText(output.getText() + "PASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
             }
             
         }
@@ -468,6 +439,41 @@ public class FailStackCalc extends javax.swing.JFrame {
         int repairCost = getRepairCost(durability);
         int cronCost = 1000000 * cronstones;
         return stoneCost + repairCost + cronCost;
+    }
+    
+    private void calculateForceCost()
+    {
+        //calculating forced cost if item is a weapon
+        if(gearType.getSelectedIndex() == 0)
+        {
+            if(getEnhanceLevel() < 7)
+                forceCost.setText("0");
+            else if (getEnhanceLevel() > 14)
+                forceCost.setText("Can't force!");
+            else
+            {
+                int index = getEnhanceLevel();
+                forceCost.setText(String.format("%,d", getStoneCost((int)weaponstats[index][3]) + getRepairCost(((int)weaponstats[index][4]))));
+                forceBSused.setText("Black stones used: " + (int)weaponstats[index][3]);
+                forceDuraUsed.setText("Durability used: " + (int)weaponstats[index][4]);
+        
+            }
+        }
+        //calculating forced cost if item is a piece of armor
+        else
+        {
+            if(getEnhanceLevel() < 5)
+                forceCost.setText("0");
+            else if (getEnhanceLevel() > 14)
+                forceCost.setText("Can't force!");
+            else
+            {
+                int index = getEnhanceLevel();
+                forceCost.setText(String.format("%,d", getStoneCost((int)armorstats[index][3]) + getRepairCost(((int)armorstats[index][4]))));
+                forceBSused.setText("Black stones used: " + (int)armorstats[index][3]);
+                forceDuraUsed.setText("Durability used: " + (int)armorstats[index][4]);
+            }
+        }
     }
     
     //calculates the total price of the blackstones given the number used
