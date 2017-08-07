@@ -437,7 +437,7 @@ public class FailStackCalc extends javax.swing.JFrame {
         int cronstones = Integer.parseInt(cronStones.getText());
         int stoneCost = getStoneCost(tries);
         int repairCost = getRepairCost(durability);
-        int cronCost = 1000000 * cronstones;
+        int cronCost = 1000000 * cronstones * tries;
         return stoneCost + repairCost + cronCost;
     }
     
@@ -448,8 +448,11 @@ public class FailStackCalc extends javax.swing.JFrame {
         {
             if(getEnhanceLevel() < 7)
                 forceCost.setText("0");
-            else if (getEnhanceLevel() > 14)
+            else if (getEnhanceLevel() > 14){
                 forceCost.setText("Can't force!");
+                forceBSused.setText("");
+                forceDuraUsed.setText("");
+            }
             else
             {
                 int index = getEnhanceLevel();
@@ -464,8 +467,11 @@ public class FailStackCalc extends javax.swing.JFrame {
         {
             if(getEnhanceLevel() < 5)
                 forceCost.setText("0");
-            else if (getEnhanceLevel() > 14)
+            else if (getEnhanceLevel() > 14){
                 forceCost.setText("Can't force!");
+                forceBSused.setText("");
+                forceDuraUsed.setText("");
+            }
             else
             {
                 int index = getEnhanceLevel();
