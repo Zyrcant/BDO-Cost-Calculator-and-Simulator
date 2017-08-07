@@ -49,6 +49,10 @@ public class FailStackCalc extends javax.swing.JFrame {
          {5, 0.5, 27, 0, 0},
          {2, 0.25, 25, 0, 0},
          {1.5, 0.25, 20.1, 0, 0}};
+    
+    ArrayList<Integer> stones = new ArrayList<>();
+    ArrayList<Integer> durability = new ArrayList<>();
+    ArrayList<Integer> cost = new ArrayList<>();
 
     /**
      * Creates new form FailStackCalc
@@ -89,6 +93,12 @@ public class FailStackCalc extends javax.swing.JFrame {
         forceCost = new javax.swing.JLabel();
         forceBSused = new javax.swing.JLabel();
         forceDuraUsed = new javax.swing.JLabel();
+        averageSimLabel = new javax.swing.JLabel();
+        avgSimBS = new javax.swing.JLabel();
+        avgSimDura = new javax.swing.JLabel();
+        simAvgCost = new javax.swing.JLabel();
+        simAvgBS = new javax.swing.JLabel();
+        simAvgDurability = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,7 +159,7 @@ public class FailStackCalc extends javax.swing.JFrame {
         simLabel.setFont(new java.awt.Font("Open Sans", 0, 13)); // NOI18N
         simLabel.setText("Simulations");
 
-        simulations.setText("30");
+        simulations.setText("1");
 
         cronStonesLabel.setFont(new java.awt.Font("Open Sans", 0, 13)); // NOI18N
         cronStonesLabel.setText("Cron stones used");
@@ -175,6 +185,21 @@ public class FailStackCalc extends javax.swing.JFrame {
         forceBSused.setText("               ");
 
         forceDuraUsed.setText("                 ");
+
+        averageSimLabel.setText("Simulation Average:");
+
+        avgSimBS.setText("Black stones:");
+
+        avgSimDura.setText("Durability:");
+
+        simAvgCost.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        simAvgCost.setText("0");
+
+        simAvgBS.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        simAvgBS.setText("0");
+
+        simAvgDurability.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        simAvgDurability.setText("0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,13 +254,25 @@ public class FailStackCalc extends javax.swing.JFrame {
                                 .addComponent(currentE, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(forceBSused)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(forceCostLabel)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(forceCostLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(forceCost))
+                            .addComponent(forceBSused)
+                            .addComponent(forceDuraUsed))
+                        .addGap(108, 108, 108)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(averageSimLabel)
+                            .addComponent(avgSimBS)
+                            .addComponent(avgSimDura))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(forceCost))
-                    .addComponent(forceDuraUsed))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(simAvgDurability)
+                            .addComponent(simAvgBS)
+                            .addComponent(simAvgCost))))
                 .addGap(47, 47, 47))
         );
         layout.setVerticalGroup(
@@ -291,11 +328,19 @@ public class FailStackCalc extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(forceCostLabel)
-                            .addComponent(forceCost))
+                            .addComponent(forceCost)
+                            .addComponent(averageSimLabel)
+                            .addComponent(simAvgCost))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(forceBSused)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(forceBSused)
+                            .addComponent(avgSimBS)
+                            .addComponent(simAvgBS))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(forceDuraUsed)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(forceDuraUsed)
+                            .addComponent(avgSimDura)
+                            .addComponent(simAvgDurability))))
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
@@ -315,42 +360,65 @@ public class FailStackCalc extends javax.swing.JFrame {
     }//GEN-LAST:event_currentEKeyPressed
 
     private void simulateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulateButtonActionPerformed
-        boolean passed = false;
         calculate();
         //saves the Failstacks and Passrate so the simulation can be run multiple times
         String savedFS = currentFS.getText();
         String savedPass = passRate.getText();
-        int duraUsed = 0;
-        int tries = 0;
-        int failstacks = Integer.parseInt(currentFS.getText());
         int numSims = Integer.parseInt(simulations.getText());
-        calculateForceCost();
-        //repeats the enhancement process until it passes
-        output.setText(output.getText() + "------------------------------------------------------\n");
-        while(!passed){
-            calculate();
-            double rng = Math.random()*100;
-            double pass = Double.parseDouble(passRate.getText());
-            if(rng <= pass)
-            {
-                passed = true;
-                passRate.setText(savedPass);
+        for(int i = 0; i < numSims; i++){
+            boolean passed = false;
+            int duraUsed = 0;
+            int tries = 0;
+            int failstacks = Integer.parseInt(currentFS.getText());
+            calculateForceCost();
+            //repeats the enhancement process until it passes
+            output.setText(output.getText() + "SIMULATION " + (i+1)+ " ------------------------------------------------------\n");
+            while(!passed){
+                calculate();
+                double rng = Math.random()*100;
+                double pass = Double.parseDouble(passRate.getText());
+                if(rng <= pass)
+                {
+                    passed = true;
+                    passRate.setText(savedPass);
+                    stones.add(tries);
+                    durability.add(duraUsed);
+                    cost.add(getCost(tries, duraUsed));
+                }
+                tries++;
+                if(!passed)
+                {
+                    //reduce durability and increase failstacks only if it fails
+                    duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
+                    failstacks += getEnhanceLevel() > 14 ? getEnhanceLevel() - 13 : 1;
+                    currentFS.setText(failstacks + "");
+                    output.setText(output.getText() + "Try: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
+                }
+                else
+                {
+                    currentFS.setText(savedFS);
+                    output.setText(output.getText() + "PASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n\n");
+                }
+
             }
-            tries++;
-            if(!passed)
-            {
-                //reduce durability and increase failstacks only if it fails
-                duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
-                failstacks += getEnhanceLevel() > 14 ? getEnhanceLevel() - 13 : 1;
-                currentFS.setText(failstacks + "");
-                output.setText(output.getText() + "Try: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
-            }
-            else
-            {
-                currentFS.setText(savedFS);
-                output.setText(output.getText() + "PASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
-            }
-            
+        }
+        if(numSims > 1)
+        {
+            double averageBS = 0;
+            double averageCost = 0;
+            double averageDura = 0;
+            for(Integer bs : stones)
+                averageBS += bs;
+            for(Integer cs : cost)
+                averageCost += cs;
+            for(Integer du : durability)
+                averageDura += du;
+            averageBS /= stones.size();
+            averageCost /= cost.size();
+            averageDura /= durability.size();
+            simAvgBS.setText(averageBS + "");
+            simAvgCost.setText(averageCost + "");
+            simAvgDurability.setText(averageDura + "");
         }
     }//GEN-LAST:event_simulateButtonActionPerformed
 
@@ -547,6 +615,9 @@ public class FailStackCalc extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Cost;
+    private javax.swing.JLabel averageSimLabel;
+    private javax.swing.JLabel avgSimBS;
+    private javax.swing.JLabel avgSimDura;
     private javax.swing.JTextField bsCost;
     private javax.swing.JLabel bsLabel;
     private javax.swing.JTextField cronStones;
@@ -570,6 +641,9 @@ public class FailStackCalc extends javax.swing.JFrame {
     private javax.swing.JTextArea output;
     private javax.swing.JLabel passRate;
     private javax.swing.JLabel passRateLabel;
+    private javax.swing.JLabel simAvgBS;
+    private javax.swing.JLabel simAvgCost;
+    private javax.swing.JLabel simAvgDurability;
     private javax.swing.JLabel simLabel;
     private javax.swing.JButton simulateButton;
     private javax.swing.JTextField simulations;
