@@ -241,12 +241,12 @@ public class FailStackCalc extends javax.swing.JFrame {
             }
             if(!passed)
             {
-                duraUsed -= getEnhanceLevel() > 14 ? 10 : 5;
+                duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
             }
             tries++;
-            failstacks += getEnhanceLevel()>14 ? getEnhanceLevel()-13 : 1;
+            failstacks += passed ? -failstacks : getEnhanceLevel()>14 ? getEnhanceLevel()-13 : 1;
             currentFS.setText(passed ? savedFS : failstacks + "");
-            output.setText(output.getText() + "\nTry: " + tries + " | failstack : " + failstacks);
+            output.setText(output.getText() + "\nTry: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10));
         }
     }//GEN-LAST:event_simulateButtonActionPerformed
 
