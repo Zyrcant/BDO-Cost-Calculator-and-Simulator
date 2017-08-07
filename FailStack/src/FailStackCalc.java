@@ -67,11 +67,6 @@ public class FailStackCalc extends javax.swing.JFrame {
         eLevel.setText("Current enhancement");
 
         currentE.setText("0");
-        currentE.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                currentEActionPerformed(evt);
-            }
-        });
         currentE.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 currentEKeyPressed(evt);
@@ -242,17 +237,19 @@ public class FailStackCalc extends javax.swing.JFrame {
             if(!passed)
             {
                 duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
+                tries++;
+                failstacks += getEnhanceLevel() > 14 ? getEnhanceLevel() - 13 : 1;
+                currentFS.setText(passed ? savedFS : failstacks + "");
+                output.setText(output.getText() + "\nTry: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10));
             }
-            tries++;
-            failstacks += passed ? -failstacks : getEnhanceLevel()>14 ? getEnhanceLevel()-13 : 1;
-            currentFS.setText(passed ? savedFS : failstacks + "");
-            output.setText(output.getText() + "\nTry: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10));
+            else
+            {
+                tries++;
+                output.setText(output.getText() + "\nPASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + (Integer.parseInt(bsCost.getText())*tries + Integer.parseInt(itemCost.getText())*duraUsed/10));
+            }
+            
         }
     }//GEN-LAST:event_simulateButtonActionPerformed
-
-    private void currentEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentEActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_currentEActionPerformed
 
     private int getEnhanceLevel()
     {
