@@ -67,6 +67,11 @@ public class FailStackCalc extends javax.swing.JFrame {
         eLevel.setText("Current enhancement");
 
         currentE.setText("0");
+        currentE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                currentEActionPerformed(evt);
+            }
+        });
         currentE.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 currentEKeyPressed(evt);
@@ -232,25 +237,29 @@ public class FailStackCalc extends javax.swing.JFrame {
             if(rng <= pass)
             {
                 passed = true;
-                currentFS.setText(savedFS);
                 passRate.setText(savedPass);
             }
+            if(!passed)
+            {
+                duraUsed -= getEnhanceLevel() > 14 ? 10 : 5;
+            }
             tries++;
-            failstacks++;
-            currentFS.setText(failstacks + "");
+            failstacks += getEnhanceLevel()>14 ? getEnhanceLevel()-13 : 1;
+            currentFS.setText(passed ? savedFS : failstacks + "");
             output.setText(output.getText() + "\nTry: " + tries + " | failstack : " + failstacks);
         }
     }//GEN-LAST:event_simulateButtonActionPerformed
 
-    //calcualtes the pass rate
-    private void calculate()
+    private void currentEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_currentEActionPerformed
+
+    private int getEnhanceLevel()
     {
-        //gets the current enhancement and failstack number
         String s = currentE.getText();
-        String p = currentFS.getText();
         s = s.toLowerCase();
         int curEnhance = -1;
-        //if the current enhancement is above +15 (pri, duo, tri, tet...)
+        //if the current enhancement is above +15 (pri, duo, tri, tet, pen)
         if(s.matches(".*[a-z].*"))
         {
             switch(s){
@@ -275,6 +284,15 @@ public class FailStackCalc extends javax.swing.JFrame {
         }
         else
             curEnhance = Integer.parseInt(s);
+        return curEnhance;
+    }
+    //calcualtes the pass rate
+    private void calculate()
+    {
+        //gets the current enhancement and failstack number
+        String p = currentFS.getText();
+        int curEnhance = getEnhanceLevel();
+        boolean fserror = false;
         int curFS = Integer.parseInt(p);
         if(curEnhance > -1 && curEnhance < 20){
             if(curEnhance < 7)
@@ -289,6 +307,8 @@ public class FailStackCalc extends javax.swing.JFrame {
                     passRate.setText(pass + "");
             }
         }
+        else if (curFS == -1)
+            errorFS();
         else
             error();
     }
@@ -296,6 +316,11 @@ public class FailStackCalc extends javax.swing.JFrame {
     private void error()
     {
         passRate.setText("Invalid enhancement.");
+    }
+    
+    private void errorFS()
+    {
+        passRate.setText("Invalid failstacks.");
     }
     /**
      * @param args the command line arguments
