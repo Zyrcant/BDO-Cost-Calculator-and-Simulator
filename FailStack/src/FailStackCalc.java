@@ -472,7 +472,7 @@ public class FailStackCalc extends javax.swing.JFrame {
             cost = durability * repairCost;
         }
         if(grade.equals("Blue"))
-            cost *=2;
+            cost /=2;
         return cost;
     }
     
