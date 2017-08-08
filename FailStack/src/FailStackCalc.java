@@ -50,15 +50,13 @@ public class FailStackCalc extends javax.swing.JFrame {
          {2, 0.25, 25, 0, 0},
          {1.5, 0.25, 20.1, 0, 0}};
     
-    ArrayList<Integer> stones = new ArrayList<>();
-    ArrayList<Integer> durability = new ArrayList<>();
-    ArrayList<Integer> cost = new ArrayList<>();
 
     /**
      * Creates new form FailStackCalc
      */
     public FailStackCalc() {
         initComponents();
+        showSim(false);
     }
 
    
@@ -93,12 +91,13 @@ public class FailStackCalc extends javax.swing.JFrame {
         forceCost = new javax.swing.JLabel();
         forceBSused = new javax.swing.JLabel();
         forceDuraUsed = new javax.swing.JLabel();
-        averageSimLabel = new javax.swing.JLabel();
+        avgSimLabel = new javax.swing.JLabel();
         avgSimBS = new javax.swing.JLabel();
         avgSimDura = new javax.swing.JLabel();
         simAvgCost = new javax.swing.JLabel();
         simAvgBS = new javax.swing.JLabel();
-        simAvgDurability = new javax.swing.JLabel();
+        simAvgDura = new javax.swing.JLabel();
+        showAttempts = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,7 +185,7 @@ public class FailStackCalc extends javax.swing.JFrame {
 
         forceDuraUsed.setText("                 ");
 
-        averageSimLabel.setText("Simulation Average:");
+        avgSimLabel.setText("Simulation Average:");
 
         avgSimBS.setText("Black stones:");
 
@@ -198,60 +197,66 @@ public class FailStackCalc extends javax.swing.JFrame {
         simAvgBS.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         simAvgBS.setText("0");
 
-        simAvgDurability.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        simAvgDurability.setText("0");
+        simAvgDura.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        simAvgDura.setText("0");
+
+        showAttempts.setSelected(true);
+        showAttempts.setText("Show attempts of each simulation");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(Cost, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(passRateLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(passRate))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(cronStonesLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cronStones, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(simLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(simulations, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(itemLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(itemCost, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(bsLabel)
-                            .addGap(47, 47, 47)
-                            .addComponent(bsCost, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(simulateButton))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(gradeLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gradeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(gearLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gearType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(Cost, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(fs)
-                                .addGap(93, 93, 93)
-                                .addComponent(currentFS, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(eLevel)
+                                .addComponent(passRateLabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(currentE, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(passRate))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(cronStonesLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cronStones, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(simLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(simulations, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(itemLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(itemCost, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(bsLabel)
+                                    .addGap(47, 47, 47)
+                                    .addComponent(bsCost, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(gradeLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(gradeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(gearLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(gearType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(fs)
+                                        .addGap(93, 93, 93)
+                                        .addComponent(currentFS, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(eLevel)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(currentE, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(showAttempts)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(simulateButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -265,12 +270,12 @@ public class FailStackCalc extends javax.swing.JFrame {
                             .addComponent(forceDuraUsed))
                         .addGap(108, 108, 108)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(averageSimLabel)
+                            .addComponent(avgSimLabel)
                             .addComponent(avgSimBS)
                             .addComponent(avgSimDura))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(simAvgDurability)
+                            .addComponent(simAvgDura)
                             .addComponent(simAvgBS)
                             .addComponent(simAvgCost))))
                 .addGap(47, 47, 47))
@@ -320,6 +325,8 @@ public class FailStackCalc extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(simLabel)
                             .addComponent(simulations, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(showAttempts)
                         .addGap(18, 18, 18)
                         .addComponent(simulateButton))
                     .addGroup(layout.createSequentialGroup()
@@ -329,7 +336,7 @@ public class FailStackCalc extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(forceCostLabel)
                             .addComponent(forceCost)
-                            .addComponent(averageSimLabel)
+                            .addComponent(avgSimLabel)
                             .addComponent(simAvgCost))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -340,8 +347,8 @@ public class FailStackCalc extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(forceDuraUsed)
                             .addComponent(avgSimDura)
-                            .addComponent(simAvgDurability))))
-                .addContainerGap(80, Short.MAX_VALUE))
+                            .addComponent(simAvgDura))))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         pack();
@@ -365,18 +372,24 @@ public class FailStackCalc extends javax.swing.JFrame {
         String savedFS = currentFS.getText();
         String savedPass = passRate.getText();
         int numSims = Integer.parseInt(simulations.getText());
+        calculateForceCost();
+        ArrayList<Integer> stones = new ArrayList<>();
+        ArrayList<Integer> durability = new ArrayList<>();
+        ArrayList<Integer> cost = new ArrayList<>();
+        output.setText("");
         for(int i = 0; i < numSims; i++){
             boolean passed = false;
             int duraUsed = 0;
             int tries = 0;
             int failstacks = Integer.parseInt(currentFS.getText());
-            calculateForceCost();
+            if(showAttempts.isSelected())
+                output.setText(output.getText() + "SIMULATION " + (i+1)+ " ------------------------------------------------------\n");
             //repeats the enhancement process until it passes
-            output.setText(output.getText() + "SIMULATION " + (i+1)+ " ------------------------------------------------------\n");
             while(!passed){
                 calculate();
                 double rng = Math.random()*100;
                 double pass = Double.parseDouble(passRate.getText());
+                tries++;
                 if(rng <= pass)
                 {
                     passed = true;
@@ -385,25 +398,28 @@ public class FailStackCalc extends javax.swing.JFrame {
                     durability.add(duraUsed);
                     cost.add(getCost(tries, duraUsed));
                 }
-                tries++;
                 if(!passed)
                 {
                     //reduce durability and increase failstacks only if it fails
                     duraUsed += getEnhanceLevel() > 14 ? 10 : 5;
                     failstacks += getEnhanceLevel() > 14 ? getEnhanceLevel() - 13 : 1;
                     currentFS.setText(failstacks + "");
-                    output.setText(output.getText() + "Try: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
+                    if(showAttempts.isSelected())
+                        output.setText(output.getText() + "Try: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
                 }
                 else
                 {
                     currentFS.setText(savedFS);
-                    output.setText(output.getText() + "PASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n\n");
+                    output.setText(output.getText() + "PASS : " + "Blackstones: " + tries + " | Failstack : " + failstacks + " | Durability: " + duraUsed + " | Cost: " + String.format("%,d", getCost(tries, duraUsed)) + "\n");
+                    if(showAttempts.isSelected())
+                        output.setText(output.getText()+"\n");
                 }
 
             }
         }
         if(numSims > 1)
         {
+            showSim(true);
             double averageBS = 0;
             double averageCost = 0;
             double averageDura = 0;
@@ -416,10 +432,12 @@ public class FailStackCalc extends javax.swing.JFrame {
             averageBS /= stones.size();
             averageCost /= cost.size();
             averageDura /= durability.size();
-            simAvgBS.setText(averageBS + "");
-            simAvgCost.setText(averageCost + "");
-            simAvgDurability.setText(averageDura + "");
+            simAvgBS.setText(String.format("%,.2f", averageBS));
+            simAvgCost.setText(String.format("%,.2f", averageCost));
+            simAvgDura.setText(String.format("%,.2f", averageDura));
         }
+        else
+            showSim(false);
     }//GEN-LAST:event_simulateButtonActionPerformed
 
     //gets the current enhancement level
@@ -573,6 +591,17 @@ public class FailStackCalc extends javax.swing.JFrame {
         return cost;
     }
     
+    //sets visibility of the averages for the simulations
+    private void showSim(boolean show)
+    {
+        avgSimLabel.setVisible(show);
+        avgSimBS.setVisible(show);
+        avgSimDura.setVisible(show);
+        simAvgCost.setVisible(show);
+        simAvgBS.setVisible(show);
+        simAvgDura.setVisible(show);
+    }
+    
     private void error()
     {
         passRate.setText("Invalid enhancement.");
@@ -615,9 +644,9 @@ public class FailStackCalc extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Cost;
-    private javax.swing.JLabel averageSimLabel;
     private javax.swing.JLabel avgSimBS;
     private javax.swing.JLabel avgSimDura;
+    private javax.swing.JLabel avgSimLabel;
     private javax.swing.JTextField bsCost;
     private javax.swing.JLabel bsLabel;
     private javax.swing.JTextField cronStones;
@@ -641,9 +670,10 @@ public class FailStackCalc extends javax.swing.JFrame {
     private javax.swing.JTextArea output;
     private javax.swing.JLabel passRate;
     private javax.swing.JLabel passRateLabel;
+    private javax.swing.JCheckBox showAttempts;
     private javax.swing.JLabel simAvgBS;
     private javax.swing.JLabel simAvgCost;
-    private javax.swing.JLabel simAvgDurability;
+    private javax.swing.JLabel simAvgDura;
     private javax.swing.JLabel simLabel;
     private javax.swing.JButton simulateButton;
     private javax.swing.JTextField simulations;
